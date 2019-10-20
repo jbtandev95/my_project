@@ -1,11 +1,11 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 var UserSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: [true, "can't be blank"], index: true },
     age: Number,
     name: String,
-    password: String
+    password: { type: String, required: [true, "Password is required"] }
 }, { timestamps: true });
 
 

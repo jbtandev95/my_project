@@ -1,12 +1,12 @@
-var jwt = require('jsonwebtoken');
-var config = require("./config/config.js");
+const jwt = require('jsonwebtoken');
+const config = require("../../config/config.js");
 
 /*
  *	Token Generator that takes in a payload
  *	Payload: { username: xxx, email: yyy}
  *	Returns a token object / Returns null if no payload
  */
-var signToken = (payload) => {
+const signToken = (payload) => {
     console.log("Signing in process...", payload);
 
     if (payload) {
@@ -24,7 +24,7 @@ var signToken = (payload) => {
     }
 };
 
-var verifyToken = () => {
+const verifyToken = () => {
 
 }
 

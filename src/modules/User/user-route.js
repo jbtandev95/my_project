@@ -1,12 +1,12 @@
-var router = require('express').Router();
-var config = require('../config/config.js');
-var jwt = require('jsonwebtoken');
-var auth = require("../auth.js");
-var mongoose = require("mongoose");
-var User = mongoose.model("User");
+const router = require('express').Router();
+const config = require('../../config/config.js');
+const jwt = require('jsonwebtoken');
+const auth = require("../Auth/auth.js");
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
 const bcrypt = require('bcrypt');
 
-router.get("/findAllUser", function(req, res, next) {
+router.get("user/all", function(req, res, next) {
     User.find().then(function(users) {
         return res.json({ users: users });
     }).catch(next);
@@ -39,7 +39,7 @@ router.post("/login", function(req, res, next) {
     }
 });
 
-router.post("/user", function(req, res, next) {
+router.post("/user/create", function(req, res, next) {
     var user = new User();
 
     user.username = req.body.username;
@@ -55,7 +55,7 @@ router.post("/user", function(req, res, next) {
     // }).catch(next);
 });
 
-router.post("/userLogin", function(req, res, next) {
+router.post("/user/login", function(req, res, next) {
     var foundUser = null;
     User.findOne({ username: req.body.username }).then(function(user) {
         foundUser = user;
