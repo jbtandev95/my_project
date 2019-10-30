@@ -1,68 +1,68 @@
 const mongoose = require('mongoose');
 const Wishlist = mongoose.model("Wishlist");
-const ErrorCodeBundle = require("../../bundles/ErrorCode/ErrorCode.js");
+const CommonUtil = require('../../utils/CommonUtils.js');
+const WishlistFactory = require("./wishlistController.js");
 
 const createWish = (wishlistDto, res, next) => {
     Wishlist.findOne({ name: wishlistDto.name }).then(existingWish => {
         if (existingWish) {
-            return res.json({ success: false, errorCode: ErrorCodeBundle.err1001 });
+            CommonUtil.generateResponse(res, null, "err1001");
         } else {
             const wishlist = new Wishlist();
 
             wishlist.name = wishlistDto.name;
             wishlist.value = wishlistDto.value;
             wishlist.priority = wishlistDto.priority;
-
             wishlist.save().then(function() {
-                return res.json({ success: true, wishlist: wishlist });
+                CommonUtil.generateResponse(res, wishlist);
             }).catch(next);
         }
     }).catch(err => {
-        return res.json({ success: false, errorCode: ErrorCodeBundle.err1002 });
+        CommonUtil.generateResponse(res, null, "err1002");
     });
 };
 
 const updateWish = (wishlistDto, res, next) => {
     Wishlist.findOneAndUpdate({ name: wishlistDto.name }, { $set: { name: wishlistDto.updateName } }, { new: true }).then((existingWish) => {
         if (existingWish) {
-            return res.json({ success: true, wishlist: existingWish });
+            CommonUtil.generateResponse(res, existingWish);
         } else {
-            return res.json({ success: false, errorCode: ErrorCodeBundle.err4004 });
+            CommonUtil.generateResponse(res, null, "err4004");
         }
     }).catch(err => {
-        return res.json({ success: false, errorCode: ErrorCodeBundle.err1002 });
+        CommonUtil.generateResponse(res, null, "err1002");
     })
 };
 
 const deleteWish = (wishlistDto, res, next) => {
     Wishlist.findOneAndRemove({ name: wishlistDto.name }).then((wishlist) => {
         if (wishlist) {
-            return res.json({ success: true, wishlist: wishlist });
+            CommonUtil.generateResponse(res, wishlist);
         } else {
-            return res.json({ success: false, errorCode: ErrorCodeBundle.err4004 });
+            CommonUtil.generateResponse(res, null, "err4004");
         }
     }).catch(err => {
-        return res.json({ success: false, errorCode: ErrorCodeBundle.err1002 });
+        CommonUtil.generateResponse(res, null, "err1002");
     });
 };
 
 const findWish = (wishlistDto, res, next) => {
     Wishlist.findOne({ name: wishlistDto.name }).then(wishlist => {
         if (wishlist) {
-            return res.json({ success: true, wishlist: wishlist });
+            CommonUtil.generateResponse(res, wishlist);
         } else {
-            return res.json({ success: false, errorCode: ErrorCodeBundle.err4004 });
+            CommonUtil.generateResponse(res, null, "err4004");
         }
     }).catch(err => {
-        return res.json({ success: false, errorCode: ErrorCodeBundle.err1002 });
+        CommonUtil.generateResponse(res, null, "err1002");
     });
 };
 
 const findAll = (wishlistDto, res, next) => {
     Wishlist.find().then(function(wishlist) {
-        return res.json({ wishlist: wishlist });
+        CommonUtil.generateResponse(res, wishlist);
     }).catch(err => {
-        return res.json({ success: false, errorCode: ErrorCodeBundle.err1002 });
+        CommonUtil.generateResponse(res, null, "err1002");
     });
 }
 

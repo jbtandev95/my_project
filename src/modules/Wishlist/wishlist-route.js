@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const mongoose = require('mongoose');
-const Wishlist = mongoose.model("Wishlist");
 const wishlistController = require("./wishlistController.js");
 
 /*
