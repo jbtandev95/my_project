@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Wishlist = mongoose.model("Wishlist");
 const CommonUtil = require('../../utils/CommonUtils.js');
-const WishlistFactory = require("./wishlistController.js");
 
 const createWish = (wishlistDto, res, next) => {
     Wishlist.findOne({ name: wishlistDto.name }).then(existingWish => {
