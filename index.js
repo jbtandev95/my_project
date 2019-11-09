@@ -33,7 +33,7 @@ app.get('/', function(req, res) {
 
 
 app.get('/error', function(req, res) {
-    throw new CustomError(404, "Internal Server Error");
+    throw new CustomError(500, "Internal Server Error");
 });
 
 //middleware to handle errors
