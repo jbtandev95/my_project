@@ -1,17 +1,22 @@
 const mongoose = require('mongoose');
 const Transaction = mongoose.model("Transaction");
-const CommonUtil = require('../../utils/CommonUtils.js');
+const { CustomError } = require("../../utils/CustomError");
+const ErrorCodeBundle = require("../../bundles/ErrorCode/ErrorCodeBundle.js");
 
-const findByUserId = (transactionDto, res, next) => {
+const findListByUserId = (transactionDto, res, next) => {
     Transaction.find({ userId: transactionDto.userId }).then(function(transactionList) {
-        CommonUtil.generateResponse(res, transactionList);
+        if (transactionList.length > 0) {
+            res.result = transactionList;
+            next();
+        } else {
+            next(new CustomError(404, ErrorCodeBundle["err4004"]));
+        }
     }).catch(err => {
-        CommonUtil.generateResponse(res, null, "err1002");
+        throw new CustomError(500, ErrorCodeBundle["err1002"]);
     });
 };
 
 const createOne = (transactionDto, res, next) => {
-
     const transaction = new Transaction();
 
     transaction.name = transactionDto.name;
@@ -19,14 +24,16 @@ const createOne = (transactionDto, res, next) => {
     transaction.type = transactionDto.type;
     transaction.userId = transactionDto.userId;
     transaction.save().then(function() {
-        CommonUtil.generateResponse(res, transaction);
-    }).catch(next);
-
+        res.result = transaction;
+        next();
+    }).catch(err => {
+        throw new CustomError(500, ErrorCodeBundle["err1002"]);
+    });
 };
 
 const summaryByUserId = (transactionDto, res, next) => {
     Transaction.find({ userId: transactionDto.userId }).then(function(transactionList) {
-        if (transactionList && transactionList.length > 0) {
+        if (transactionList.length > 0) {
             var summary = null;
             var totalIncome = 0;
             var totalOutcome = 0;
@@ -44,19 +51,19 @@ const summaryByUserId = (transactionDto, res, next) => {
                 totalOutcome: totalOutcome,
                 userId: transactionDto.userId
             }
-
-            CommonUtil.generateResponse(res, summary);
+            res.result = summary;
+            next();
         } else {
-            CommonUtil.generateResponse(res, null, "err4004");
+            next(new CustomError(404, ErrorCodeBundle["err4004"]));
         }
     }).catch(err => {
-        CommonUtil.generateResponse(res, null, "err1002");
+        throw new CustomError(500, ErrorCodeBundle["err1002"]);
     });
-}
+};
 
 
 module.exports = {
-    findByUserId: findByUserId,
+    findListByUserId: findListByUserId,
     createOne: createOne,
     summaryByUserId: summaryByUserId
-}
+};
