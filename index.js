@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { handleError, CustomError } = require("./src/utils/CustomError");
-const { buildResponse } = require("./src/utils/CustomResponse");
+const { buildResponse, validateRequest } = require("./src/utils/RequestResponseUtil");
 //import environment config from .env file
 require('dotenv').config();
 
@@ -18,6 +18,10 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//hash check request to mitigate man in the middle attack
+app.use((req, res, next) => {
+    validateRequest(req, res, next);
+});
 //import routes
 app.use(require('./src/modules/User/user-route.js'));
 app.use(require('./src/modules/Wishlist/wishlist-route.js'));
@@ -43,7 +47,7 @@ app.use((err, req, res, next) => {
 
 //middleware to handle proper response build
 app.use((req, res, next) => {
-	buildResponse(req, res, next);
+    buildResponse(req, res, next);
 });
 
 app.listen(port, function() {
