@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 
 var obj = {
-    userId: "Joe95"
-};
+    "name": "Badminton ASTROX89",
+    "updateName": "Badminton ASTROX99"
+}
 
 bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(JSON.stringify(obj), salt, function(err, hash) {

@@ -33,17 +33,22 @@ const validateRequest = (req, res, next) => {
                     payload = req.body;
                     break;
             };
+
             const salt = req.headers["token"].substring(0, 29);
+
             bcrypt.hash(JSON.stringify(payload), salt, function(err, hash) {
                 if (hash === req.headers["token"]) {
                     next();
                 } else {
-                    next(new CustomError(404, ErrorCodeBundle["err5000"]));
+                    next(new CustomError(500, ErrorCodeBundle["err5000"]));
                 }
             });
+
         } else {
             throw new CustomError(500, ErrorCodeBundle["err5000"]);
         }
+    } else {
+        next();
     }
 };
 
