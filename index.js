@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { handleError, CustomError } = require("./src/utils/CustomError");
-const { responseBuilder } = require("./src/utils/CustomResponse");
+const { buildResponse } = require("./src/utils/CustomResponse");
 //import environment config from .env file
 require('dotenv').config();
 
@@ -43,7 +43,7 @@ app.use((err, req, res, next) => {
 
 //middleware to handle proper response build
 app.use((req, res, next) => {
-	responseBuilder(req, res, next);
+	buildResponse(req, res, next);
 });
 
 app.listen(port, function() {

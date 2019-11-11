@@ -1,4 +1,4 @@
-const responseBuilder = (req, res, next) => {
+const buildResponse = (req, res, next) => {
     //setup response package
     setupResponse(res);
     return res.json({
@@ -18,5 +18,5 @@ const setupResponse = res => {
 }
 
 module.exports = {
-    responseBuilder
+    buildResponse
 }
